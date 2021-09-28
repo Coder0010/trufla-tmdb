@@ -6,7 +6,7 @@ use Tests\TestCase;
 use App\Models\Genre;
 use App\Models\Movie;
 
-class FullFeatureTest extends TestCase
+class MovieFeatureTest extends TestCase
 {
     /** @test */
     public function a_movie_can_be_added_to_db()

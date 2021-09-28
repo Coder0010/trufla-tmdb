@@ -10,11 +10,13 @@ use App\Models\Genre;
 use App\Models\Movie;
 use App\Contracts\iPush;
 use App\Contracts\iFetch;
-use App\Servies\MainServie;
 use App\Servies\GenreServie;
+use App\Traits\PaginationTrait;
 
-class MovieServie extends MainServie implements iPush
+class MovieServie implements iPush
 {
+    use PaginationTrait;
+
     // this property for storing all movies fetched from movies/ api
     public $movies_response;
 
@@ -75,11 +77,14 @@ class MovieServie extends MainServie implements iPush
      */
     public function push() : void
     {
-        logger('push from MOVIE service');
         if (!$this->getMoviesResponse()) {
             logger('no movies added to local db');
             return;
         }
+
+        logger('push from MOVIE service');
+        logger($this->getMoviesResponse());
+
         foreach ($this->getMoviesResponse() as $row) {
             DB::beginTransaction();
             try {

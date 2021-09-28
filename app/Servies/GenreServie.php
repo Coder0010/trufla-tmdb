@@ -21,7 +21,7 @@ class GenreServie implements iFetch, iPush
     public $movies_genres_ids = [];
 
     // storing all unique genres from both of previous properties
-    public $genre_ids = [];
+    public $genres = [];
 
     //***  start setters && getters ***\\
     /**
@@ -33,7 +33,7 @@ class GenreServie implements iFetch, iPush
 
         // set uniques genres only
         foreach ($this->getMoviesGenresIDs() as $row) {
-            $this->setGenreIDs(
+            $this->setGenres(
                 $this->getGenresResponse()->where("tmdb_id", $row)->first()
             );
         }
@@ -71,17 +71,17 @@ class GenreServie implements iFetch, iPush
     /**
      * setter for movies genre IDS
      */
-    public function setGenreIDs($val)
+    public function setGenres($val)
     {
-        $this->genre_ids[] = $val;
+        $this->genres[] = $val;
     }
 
     /**
      * getter movies genre IDS
      */
-    public function getGenreIDs() : array
+    public function getGenres() : array
     {
-        return $this->genre_ids;
+        return $this->genres;
     }
     //***  end setters && getters ***\\
 
@@ -115,12 +115,15 @@ class GenreServie implements iFetch, iPush
      */
     public function push() : void
     {
-        logger('push from GENRE service');
-        if (!$this->getGenreIDs()) {
+        if (!$this->getGenres()) {
             logger('no genres added to local db');
             return;
         }
-        foreach ($this->getGenreIDs() as $row) {
+
+        logger('push from GENRE service');
+        logger(collect($this->getGenres())->toJson());
+
+        foreach ($this->getGenres() as $row) {
             DB::beginTransaction();
             try {
                 Genre::updateOrCreate([

@@ -4,7 +4,7 @@ namespace App\Traits;
 
 use Illuminate\Database\Eloquent\Builder;
 
-trait SearchScope
+trait SearchTrait
 {
     /**
     * This Scope for returning all data with specific genre id

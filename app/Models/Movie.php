@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Storage;
 use App\Models\Genre;
-use App\Traits\SearchScope;
+use App\Traits\SearchTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Movie extends Model
 {
-    use HasFactory, SearchScope;
+    use HasFactory, SearchTrait;
 
     protected $fillable = [
         'name',
@@ -32,6 +32,7 @@ class Movie extends Model
      */
     public static function updateMovieGenres()
     {
+        // here i need to pass only the movies i seed it at current page
         foreach (self::all() as $entity) {
             if ($entity['tmdb_genre_ids'] && is_array($entity['tmdb_genre_ids'])) {
                 foreach ($entity['tmdb_genre_ids'] as $genre_id) {

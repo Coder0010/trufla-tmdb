@@ -6,6 +6,8 @@ use File;
 use Storage;
 use App\Models\Genre;
 use App\Models\Movie;
+use App\Jobs\SeedDataJob;
+use App\Jobs\UpdateMovieGenreJob;
 use App\Servies\GenreServie;
 use App\Servies\MovieServie;
 use Illuminate\Console\Command;
@@ -40,12 +42,6 @@ class FetchDataCommand extends Command
      * count of pages depend on requested records
      */
     public $pages_count;
-
-    public function __construct()
-    {
-        parent::__construct();
-        $this->clearInternalStorage();
-    }
 
     /**
      * setter for requested records
@@ -95,12 +91,12 @@ class FetchDataCommand extends Command
      */
     public function handle()
     {
-        $this->call('log:clear');
+        $this->call("log:clear");
 
         $type_choice = $this->choice(
             "Movies type of you want?",
             config("system.records_type"),
-            "popular"
+            "top_rated",
         );
 
         $records_choice = $this->choice(
@@ -113,35 +109,12 @@ class FetchDataCommand extends Command
 
         $this->output->progressStart($this->getPagesCount());
         for ($i = 1; $i <= $this->getPagesCount(); $i++) {
-            $movieService = new MovieServie();
-            $movieService->fetch($i, $type_choice);
-
+            dispatch(new SeedDataJob($i, $type_choice));
             sleep(1);
             $this->output->progressAdvance();
         }
-
-        $genre = new GenreServie();
-        $genre->fetch();
-
         $this->output->progressFinish();
 
-        $this->info("added movies");
-        $this->table(["name", "created at"], Movie::get(["name", "created_at"]));
-
-        $this->info("added genres");
-        $this->table(["name", "created at"], Genre::get(["name", "created_at"]));
-    }
-
-    // remove all files in storage disk
-    public function clearInternalStorage()
-    {
-        File::cleanDirectory("storage/app/public");
-        Storage::put(".gitignore", "*\r\n!.gitignore\n");
-    }
-
-    public function __destruct()
-    {
-        $this->clearInternalStorage();
-        Movie::updateMovieGenres();
+        dispatch(new UpdateMovieGenreJob($i, $type_choice));
     }
 }

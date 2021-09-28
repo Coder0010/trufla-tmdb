@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Servies;
+namespace App\Traits;
 
-class MainServie
+trait PaginationTrait
 {
     // current page that api will use
     public $current_page;
