@@ -36,7 +36,9 @@ Switch to the repo folder
     php artisan test
 ---
 ## Step Four Seeding
+
 ** note please open laravel.log file **
+
     * php artisan queue:work
     * php artisan fetch:data
 

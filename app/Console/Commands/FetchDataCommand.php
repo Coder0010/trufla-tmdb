@@ -115,6 +115,6 @@ class FetchDataCommand extends Command
         }
         $this->output->progressFinish();
 
-        dispatch(new UpdateMovieGenreJob($i, $type_choice));
+        dispatch(new UpdateMovieGenreJob());
     }
 }
