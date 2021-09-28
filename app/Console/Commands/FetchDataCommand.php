@@ -95,6 +95,8 @@ class FetchDataCommand extends Command
      */
     public function handle()
     {
+        $this->call('log:clear');
+
         $type_choice = $this->choice(
             "Movies type of you want?",
             config("system.records_type"),

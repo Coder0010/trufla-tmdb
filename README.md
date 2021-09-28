@@ -16,7 +16,7 @@ Switch to the repo folder
 
 ## Step Two
 
-* Run This bash file **bashes/refresh.sh** at your terminal for prepare the project
+* Run This bash file **bashes/composer.sh** at your terminal for prepare the project
 
 * Copy .env.local file and make the required configuration changes in the .env file
 
